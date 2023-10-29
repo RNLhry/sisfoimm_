@@ -8,7 +8,7 @@
                     <h6>Kelola Galeri Anda</h6>
                 </div>
                 <div class="page-btn">
-                    <a href="/galeri/tambah" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img">Add
+                    <a href="/galeri/tambah" class="btn btn-added"><img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img">Add
                         Galeri</a>
                 </div>
             </div>
@@ -23,10 +23,17 @@
                                     <span><img src="assets/img/icons/closes.svg" alt="img"></span>
                                 </a>
                             </div> -->
-                            <div class="search-input">
-                                <a class="btn btn-searchset"><img src="assets/img/icons/search-white.svg"
-                                        alt="img"></a>
-                            </div>
+                            <form class="form-inline" action="/galeri/cari" method="GET">
+                                <div class="search-input">
+                                    <a class="btn btn-searchset"><img src="{{ asset('assets/img/icons/search-white.svg') }}"
+                                            alt="img"></a>
+                                    <div id="DataTables_Table_0_filter" class="dataTables_filter"><label> <input
+                                                type="search" type="text" name="cari"
+                                                placeholder="Cari Data Galeri ..." value="{{ old('cari') }}"></label>
+                                    </div>
+                                    <button style="display: none;" type="submit"></button>
+                                </div>
+                            </form>
                         </div>
                         <!-- <div class="wordset">
                             <ul>

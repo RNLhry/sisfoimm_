@@ -19,7 +19,8 @@
                                 <div class="profile-content">
                                     <div class="profile-contentimg">
                                         @if ($foto)
-                                            <img src="{{ url('images/' .$foto) }}" class="user-image" alt="img" id="blah">
+                                        <img src="{{ url('images/' . $foto) }}" class="user-image" alt="img" id="blah">
+
                                            
                                         @else
                                             <img src="{{ asset('assets/img/product/avatar.png') }}" alt="img"

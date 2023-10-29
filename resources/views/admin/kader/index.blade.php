@@ -225,16 +225,7 @@
                                     </tbody>
                                 @endforeach
                             </table>
-                            <div class="dataTables_length" id="DataTables_Table_0_length">
-                                <label>
-                                    <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="custom-select custom-select-sm form-control form-control-sm">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                </label>
-                            </div>
+                         
                         </div>
                     </div>
                 </div>
