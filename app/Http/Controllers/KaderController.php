@@ -117,7 +117,7 @@ class KaderController extends Controller
         $foto = null;
         
         if ($komisariat->isNotEmpty()) {
-            $foto = 'data:image/jpeg/JPG;base64,' . base64_encode($komisariat[0]->logo_komisariat);
+            $foto = $komisariat[0]->foto;
         }
         $j = $request->segment(3);
         $kmst = Komisariat::where('komisariat.id', $j)->get();
@@ -448,23 +448,35 @@ class KaderController extends Controller
     }
     public function cari(Request $request)
     {
-    $j = $request->segment(2);
-    $roles = Level::get();
-    $kmst = Komisariat::where('komisariat.id', $j)->get();
-    $komisariat = Komisariat::get();
-    $user = Auth::user();
-    $foto = null;
-        
+        $j = $request->segment(2);
+        $roles = Level::get();
+        $kmst = Komisariat::where('komisariat.id', $j)->get();
+        $komisariat = Komisariat::get();
+        $user = Auth::user();
+        $foto = null;
+            
         if ($komisariat->isNotEmpty()) {
             $foto = 'data:image/jpeg/JPG;base64,' . base64_encode($komisariat[0]->logo_komisariat);
         }
+        
+        $cari = $request->input('cari');
+        $kader = Kader::where('kader.komisariat_id', $j)->where('nama', 'like', '%' . $cari . '%')->get();
+        $kaderLain = Kader::where('kader.komisariat_id', $kmst[0]->id)->get();
+
+        // Gabungkan hasil dari kedua kueri
+        $kaderList = $kader->concat($kaderLain);
+        
+        if ($kader->isEmpty()) {
+          
+            Toastr::warning('Data tidak ditemukan', 'Warning !!!');
+        } else {
+            if ($komisariat->isEmpty()) {
+                Toastr::info('Data tidak ditemukan pada komisariat lain.', 'Warning !!!');
+            }
+        }
     
-    $cari = $request->input('cari');
-    $kader = Kader::where('nama', 'like', '%' . $cari . '%')->get();
-  
-    
-    return view('admin.kader.index', compact('kader', 'kmst', 'roles', 'foto', 'komisariat', 'user'));
-}
+        return view('admin.kader.index', compact('kader', 'kaderList', 'kmst', 'roles', 'foto', 'komisariat', 'user'));
+    }
     
     
 }

@@ -134,6 +134,32 @@ class GaleriController extends Controller
         return redirect()->back();
 	}
 
-    // ---------------------------------------------------
+    public function cari(Request $request)
+    {
+        $j = $request->segment(2);
+        $roles = Level::get();
+        $kmst = Komisariat::where('komisariat.id', $j)->get();
+        $komisariat = Komisariat::get();
+        $user = Auth::user();
+        $foto = null;
+            
+        if ($komisariat->isNotEmpty()) {
+            $foto = $komisariat[0]->foto;
+        }
+        
+        $cari = $request->input('cari');
+        $galeri = Galeri::where('judul', 'like', '%' . $cari . '%')->get();
+        
+        if ($galeri->isEmpty()) {
+          
+            Toastr::warning('Data tidak ditemukan', 'Warning !!!');
+        } else {
+            if ($komisariat->isEmpty()) {
+                Toastr::info('Data tidak ditemukan pada komisariat lain.', 'Warning !!!');
+            }
+        }
+    
+        return view('admin.galeri.index', compact('galeri', 'kmst', 'roles', 'foto', 'komisariat', 'user'));
+    }
 
 }

@@ -168,4 +168,5 @@ class UserController extends Controller
     return view('admin.user.index', compact('kmst', 'roles', 'foto', 'komisariat', 'users', 'user', 'cari'));
 }
 
+
 }

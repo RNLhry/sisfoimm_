@@ -19,10 +19,13 @@ class InformasiController extends Controller
         $foto = null;
         
         if ($komisariat->isNotEmpty()) {
-            $foto = 'data:image/jpeg/JPG;base64,' . base64_encode($komisariat[0]->logo_komisariat);
+            $foto = 'data:image/jpeg/JPG;base64,' . base64_encode($komisariat[0]->foto);
         }
         $informasi = Informasi::get();
         if ($user->roles->id === 2) {
+            if ($komisariat->isNotEmpty()) {
+                $foto = $komisariat[0]->foto;
+            }
             $informasi = Informasi::where('komisariat_id', $komisariat[0]->id)->get();
             $kmst = Komisariat::get();
 
@@ -57,7 +60,7 @@ class InformasiController extends Controller
         $foto = null;
         
         if ($komisariat->isNotEmpty()) {
-            $foto = 'data:image/jpeg/JPG;base64,' . base64_encode($komisariat[0]->logo_komisariat);
+            $foto = $komisariat[0]->foto;
         }
         $informasi = Informasi::get();
         $categoriInfo = CategoriInformasi::get();
@@ -174,6 +177,36 @@ class InformasiController extends Controller
         Toastr::warning('Data Informasi Berhasil dihapus', 'Sukses !!!');
         return redirect()->back();
 	}
+
+    public function cari(Request $request)
+    {
+        $username = Auth::user()->username;
+        $komisariat = Komisariat::where('kode_komisariat', $username)->get();
+        $user = Auth::user();
+        $j = $request->segment(2);
+        $roles = Level::get();
+        $kmst = Komisariat::where('komisariat.id', $j)->get();
+        $user = Auth::user();
+        $foto = null;
+            
+        if ($komisariat->isNotEmpty()) {
+            $foto = $komisariat[0]->foto;
+        }
+        
+        $cari = $request->input('cari');
+        $informasi = Informasi::where('informasi.komisariat_id', $komisariat[0]->id)->where('judul', 'like', '%' . $cari . '%')->get();
+        
+        if ($informasi->isEmpty()) {
+          
+            Toastr::warning('Data tidak ditemukan', 'Warning !!!');
+        } else {
+            if ($komisariat->isEmpty()) {
+                Toastr::info('Data tidak ditemukan pada komisariat lain.', 'Warning !!!');
+            }
+        }
+    
+        return view('admin.informasi.index', compact('informasi', 'kmst', 'roles', 'foto', 'komisariat', 'user'));
+    }
 
     // ------------------------
 }
